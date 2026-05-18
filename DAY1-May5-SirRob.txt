@@ -70,13 +70,30 @@ config t
 	 description VOICEVLAN
 end
 
+Securing Switches using AAA: authentication, authorization, accounting.
+config t
+username admin privilege 15 secret pass
+username namemo privilege 15 secret pass
+line vty 0 14
+login local
+end
+
+Securing Cisco Switch dataplance traffic with PublicKEY:
+config t
+ip domain-name keykeymo
+crypto key generate rsa modulus 1024
+ip ssh version 2
+end
+show crypto key mypubkey all
+show ip ssh
+
 WARNING: IF YOU SEE AMBER/ORANGE= NEEDS FIXING!!!
 
 Trunk Ports: switch to switch:
 TAAS/BABA:
 config t
 Int Range fa0/10-12
- ! shutdown
+ shutdown
  no shutdown
  switchport trunk Encap Dot1Q
  switchport mode trunk
@@ -133,9 +150,9 @@ vlan 10
 vlan 50
    name IPCCTVLAN
 vlan 69
-   name DELETEME
+   name UPPERMGMT
 vlan 70
-    name SELLME
+    name ACCOUNTING
 vlan 71
     name HR
 vlan 100
@@ -172,10 +189,10 @@ config t
 ip routing
 ip dhcp pool CAMERA6
 host 10.31.50.6 255.255.255.0
-client-identifier 001a.0704.7f5b
+client-identifier 001a.0706.c2f7
 ip dhcp pool CAMERA8
 host 10.31.50.8 255.255.255.0
-client-identifier 001a.0709.c258 
+client-identifier 001a.0709.c26b
 end
 show ip dhcp binding
 
@@ -250,12 +267,12 @@ ephone-dn 8
 ephone-dn 10
  number 3198
 Ephone 1
-  Mac-address cafe.face.baba
+  Mac-address 6cfa.8972.f0a9
   type 8945
   button 1:8 2:7 3:6 4:5
   restart
 Ephone 2
-  Mac-address fafa.caca.baba
+  Mac-address ccd8.c1fb.10dd
   type 8945
   button 1:4 2:3 3:2 4:1
   restart  
@@ -288,10 +305,10 @@ configure terminal
  destination-pattern 11..
  session target ipv4:10.11.100.8
  codec g711ULAW
-  !dial-peer voice 12 Voip
-  !destination-pattern 12..
-  !session target ipv4:10.12.100.8
-  !codec g711ULAW
+  dial-peer voice 12 Voip
+  destination-pattern 12..
+  session target ipv4:10.12.100.8
+  codec g711ULAW
 dial-peer voice 21 Voip
  destination-pattern 21..
  session target ipv4:10.21.100.8
@@ -300,10 +317,10 @@ dial-peer voice 22 Voip
  destination-pattern 22..
  session target ipv4:10.22.100.8
  codec g711ULAW
-dial-peer voice 31 Voip
- destination-pattern 31..
- session target ipv4:10.31.100.8
- codec g711ULAW
+!dial-peer voice 31 Voip
+! destination-pattern 31..
+! session target ipv4:10.31.100.8
+! codec g711ULAW
 dial-peer voice 32 Voip
  destination-pattern 32..
  session target ipv4:10.32.100.8
@@ -419,26 +436,6 @@ router-id 10.31.100.8
 network 10.31.100.0  0.0.0.255  area 0
 end
 
-EXAM READY DAY1: NAT, NTP, DHCP, and SSH
-NAT: NETWORK ADDRESS TRANSLATION: BIGAY INTERNET SA MUNDO NI CISCO.
-config t
-ip route 0.0.0.0 0.0.0.0 200.0.0.1
-access-list 1 permit Any
-int gigabit 0/0/1
-ip nat outside
-int gigabit 0/0/0
-ip nat inside
-ip nat inside source list 1 interface gi 0/0/1 Overload
-NTP: NETWORK TIME PROTOCOL
-DHCP: DI AKO BOBO
-SSH: SECURE SHELL: CIA: confidentility,Integrity,Availablity
-CoreBABA:
-config t
-username admin privilege 15 secret pass
-ip domain-name rivanit.com
-crypto key generate rsa
-!i type mo 1024 WAG 512 na default kc di ako bobo
-ip ssh version 2
 
  !!!STATIC ROUTING FOR MININUM WAGERS: 645php/day
  !!! EDGE route NOT dikit to ClassMate:
@@ -631,34 +628,33 @@ conf t
 !
  voice register global
   mode cme
-  source-address 10.31.100.8 port 5060
+  source-address 10._.100.8 port 5060
   max-dn 12
   max-pool 12
   authenticate register
   create profile sync
  voice register dn 1
-   number 3171
+   number ____
    allow watch
-   name 3171
+   name _______
  voice register dn 2
-   number 3172
+   number ___
    allow watch
-   name 3172
+   name _______
 !
   voice register pool 1
     id mac ____.____.____
     number 1 dn 1
     dtmf-relay sip-notify
-    username 3171 password 3171
+    username ____ password ____
     codec g711ulaw
 !
   voice register pool 2
     id mac ____.____.____
     number 1 dn 2
     dtmf-relay sip-notify
-    username 3172 password 3172
+    username ____ password ____
     codec g711ulaw
-   end
 !
 *******call other countries!!!********
 config t
@@ -672,4 +668,3 @@ exit
           
 sip-ua
 sip-server ipv4:192.168.k.1
-
